@@ -16,7 +16,7 @@ import cn.edu.hfut.dmic.webcollector.net.HttpResponse;
 import cn.edu.hfut.dmic.webcollector.plugin.berkeley.BreadthCrawler;
 
 public class WeiboCrawler extends BreadthCrawler {
-	ThreadSession sessionFactory = new ThreadSession();
+	ThreadSession sessions = new ThreadSession();
     String cookie;
     public WeiboCrawler(String crawlPath, boolean autoParse) throws Exception {
         super(crawlPath, autoParse);
@@ -38,9 +38,8 @@ public class WeiboCrawler extends BreadthCrawler {
 		int pageNum = Integer.valueOf(page.getMetaData("pageNum"));
         /*抽取微博*/
         Elements weibos = page.select("div.c");
-		Session session = sessionFactory.get().openSession();
+		Session session = sessions.get().openSession();
 		Transaction transaction = session.beginTransaction();
-		transaction.begin();
 		String content = null;
         for (Element weibo : weibos) {
 			content = content(weibo);
@@ -49,7 +48,7 @@ public class WeiboCrawler extends BreadthCrawler {
 				html.setUrl(page.getUrl());
 				html.setContent(content);
 				html.setTitle(content(page.getDoc().getElementsByTag("title").first()));
-				session.persist(html);
+				session.save(html);
 			}
         }
 		transaction.commit();
@@ -59,7 +58,7 @@ public class WeiboCrawler extends BreadthCrawler {
         WeiboCrawler crawler = new WeiboCrawler("weibo_crawler", false);
 		crawler.setThreads(5);
         /*对某人微博前5页进行爬取*/
-		for (int i = 1; i <= 23; i++) {
+		for (int i = 1; i <= 1; i++) {
 			crawler.addSeed(
 					new CrawlDatum("http://weibo.cn/lindan?vt=4&page=" + i)
                     .putMetaData("pageNum", i + ""));

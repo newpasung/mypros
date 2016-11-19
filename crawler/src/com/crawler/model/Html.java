@@ -16,7 +16,7 @@ public class Html  extends BaseModel{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "hid")
-	private String id;
+	private Integer id;
 
 	@Column(name="url")
 	private String url;
@@ -50,6 +50,13 @@ public class Html  extends BaseModel{
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	
 }
